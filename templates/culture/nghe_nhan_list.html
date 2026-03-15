@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Nghệ Nhân Quan Họ Bắc Ninh{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-traditional font-bold text-quanho-red border-b-2 border-quanho-gold inline-block pb-2">
+            Nghệ Nhân Quan Họ
+        </h1>
+        <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+            Những "báu vật nhân văn sống" gìn giữ và lưu truyền ngọn lửa Dân ca Quan họ.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for nn in nghe_nhans %}
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition duration-300 overflow-hidden text-center group">
+            
+            <!-- Banner / Background Pattern top -->
+            <div class="h-24 bg-quanho-brown opacity-90 relative">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')] opacity-30 mix-blend-overlay"></div>
+            </div>
+            
+            <!-- Avatar -->
+            <div class="relative -mt-12 mb-4 flex justify-center">
+                <div class="w-24 h-24 rounded-full border-4 border-white bg-quanho-bg shadow-md flex items-center justify-center overflow-hidden">
+                    {% if nn.anh_dai_dien %}
+                        <img src="{{ nn.anh_dai_dien.url }}" alt="{{ nn.ten }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <svg class="w-16 h-16 text-gray-300 group-hover:text-quanho-gold transition" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="px-6 pb-6">
+                <h2 class="text-xl font-traditional font-bold text-gray-900 group-hover:text-quanho-red transition">{{ nn.ten }}</h2>
+                
+                <div class="flex justify-center flex-wrap gap-2 mt-2 mb-3">
+                    {% if nn.danh_hieu %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-quanho-red border border-red-200">
+                            {{ nn.danh_hieu }}
+                        </span>
+                    {% endif %}
+                    {% if nn.nam_sinh %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            Sinh: {{ nn.nam_sinh }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="text-sm text-gray-600 line-clamp-3 mb-4 text-justify px-2">
+                    {% if nn.tieu_su %}
+                        {{ nn.tieu_su }}
+                    {% else %}
+                        <span class="italic">Chưa có thông tin tiểu sử chi tiết.</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-10 text-gray-500">
+            Chưa có nghệ nhân nào trong cơ sở dữ liệu.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Trang Chủ - Quan Họ Bắc Ninh{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<div class="relative bg-quanho-brown overflow-hidden">
+    <div class="absolute inset-0">
+        <!-- Optional: Replace src with a real traditional image from static folder -->
+        <img src="https://images.unsplash.com/photo-1599395272635-c331a9829f0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+             alt="Làng quê Việt Nam" class="w-full h-full object-cover opacity-30 mix-blend-overlay">
+    </div>
+    <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl font-traditional">
+            Dân Ca Quan Họ Bắc Ninh
+        </h1>
+        <p class="mt-6 text-xl text-gray-200 max-w-3xl">
+            Di sản văn hoá phi vật thể đại diện của nhân loại được UNESCO công nhận. Vẻ đẹp mộc mạc, đậm đà bản sắc dân tộc qua từng làn điệu mượt mà, sâu lắng.
+        </p>
+    </div>
+</div>
+
+<!-- Làn Điệu & Bài Hát Tiêu Biểu -->
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-traditional font-bold text-quanho-red border-b-2 border-quanho-gold inline-block pb-2">
+            Các Bài Hát Tiêu Biểu
+        </h2>
+    </div>
+
+    <!-- Search and Filter Form -->
+    <form method="GET" action="{% url 'culture:home' %}" class="max-w-4xl mx-auto mb-10 bg-white p-4 rounded-lg shadow border border-gray-200 flex flex-col sm:flex-row gap-4">
+        <!-- Search Input -->
+        <div class="flex-grow">
+            <label for="q" class="sr-only">Tìm kiếm</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <input type="text" name="q" id="q" value="{{ search_query }}" 
+                       class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-quanho-gold focus:border-quanho-gold sm:text-sm" 
+                       placeholder="Tìm theo tên bài hoặc lời bài hát...">
+            </div>
+        </div>
+
+        <!-- Filter Dropdown -->
+        <div class="sm:w-64">
+            <label for="lan_dieu" class="sr-only">Làn điệu</label>
+            <select id="lan_dieu" name="lan_dieu" class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-quanho-gold focus:border-quanho-gold sm:text-sm rounded-md">
+                <option value="">-- Tất cả Làn điệu --</option>
+                {% for ld in lan_dieus %}
+                    <option value="{{ ld.id }}" {% if selected_lan_dieu == ld.id|stringformat:"s" %}selected{% endif %}>
+                        {{ ld.ten }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-quanho-red hover:bg-[#6b1606] shadow transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-quanho-red">
+                Tìm kiếm / Lọc
+            </button>
+        </div>
+    </form>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for bai in bai_hats %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-xl hover:border-quanho-gold transition duration-300 flex flex-col">
+            <div class="bg-quanho-bg p-4 border-b border-gray-100 flex justify-center">
+                <!-- Decorative Icon -->
+                <svg class="w-12 h-12 text-quanho-red opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+            </div>
+            <div class="p-6 flex-grow flex flex-col">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold font-traditional text-quanho-brown">{{ bai.ten_bai }}</h3>
+                    {% if user.is_authenticated %}
+                        <button class="favorite-btn text-gray-300 hover:text-red-500 transition focus:outline-none" data-id="{{ bai.id }}" title="Yêu thích">
+                            <svg class="w-6 h-6 {% if user in bai.favorites.all %}text-red-500 fill-current{% else %}fill-transparent stroke-current stroke-2{% endif %}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </button>
+                    {% endif %}
+                </div>
+                
+                <div class="text-sm text-gray-600 space-y-1 mb-4">
+                    <p><span class="font-semibold text-gray-700">Làn điệu:</span> {{ bai.lan_dieu.ten|default:"Đang cập nhật" }}</p>
+                    <p><span class="font-semibold text-gray-700">Nghệ nhân:</span> {{ bai.nghe_nhan.ten|default:"Đang cập nhật" }}</p>
+                </div>
+
+                <div class="mt-auto pt-4 relative">
+                    <a href="{% url 'culture:song_detail' bai.pk %}" class="inline-flex items-center gap-2 text-quanho-red font-semibold hover:text-quanho-gold transition">
+                        Xem lời & Nghe <span aria-hidden="true">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center text-gray-500 py-10">
+            Hiện tại chưa có bài hát nào được cập nhật.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const favoriteBtns = document.querySelectorAll('.favorite-btn');
+    favoriteBtns.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const songId = btn.getAttribute('data-id');
+            const svg = btn.querySelector('svg');
+            
+            try {
+                const response = await fetch(`/toggle-favorite/${songId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.is_favorited) {
+                        svg.classList.remove('text-gray-300', 'fill-transparent', 'stroke-current', 'stroke-2');
+                        svg.classList.add('text-red-500', 'fill-current');
+                    } else {
+                        svg.classList.remove('text-red-500', 'fill-current');
+                        svg.classList.add('text-gray-300', 'fill-transparent', 'stroke-current', 'stroke-2');
+                    }
+                }
+            } catch (error) {
+                console.error('Error toggling favorite:', error);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

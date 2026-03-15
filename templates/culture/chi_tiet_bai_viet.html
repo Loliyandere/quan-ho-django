@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ bai_viet.tieu_de }} - Quan Họ Bắc Ninh{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+    
+    <!-- Nút quay lại -->
+    <a href="{% url 'culture:danh_sach_bai_viet' %}" class="inline-flex items-center text-quanho-red hover:text-quanho-brown font-medium mb-8 transition group cursor-pointer">
+        <svg class="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Trở về danh sách Tin tức
+    </a>
+
+    <!-- Header Bài viết -->
+    <header class="mb-10">
+        <div class="flex items-center text-sm text-gray-500 mb-4">
+            <span class="bg-quanho-bg text-quanho-gold font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wide border border-quanho-gold/30">Tin Tức</span>
+            <span class="mx-3">•</span>
+            <time>{{ bai_viet.ngay_dang|date:"d tháng m, Y" }}</time>
+            {% if bai_viet.nguoi_dang %}
+                <span class="mx-3">•</span>
+                <span>Tác giả: {{ bai_viet.nguoi_dang.username }}</span>
+            {% endif %}
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-traditional font-bold text-gray-900 leading-tight mb-6">
+            {{ bai_viet.tieu_de }}
+        </h1>
+        
+        {% if bai_viet.tom_tat %}
+            <div class="text-xl text-gray-600 font-medium italic border-l-4 border-quanho-gold pl-4 py-1">
+                {{ bai_viet.tom_tat }}
+            </div>
+        {% endif %}
+    </header>
+
+    <!-- Ảnh bìa -->
+    {% if bai_viet.hinh_anh %}
+        <div class="mb-10 rounded-2xl overflow-hidden shadow-lg border border-gray-100/50">
+            <img src="{{ bai_viet.hinh_anh.url }}" alt="{{ bai_viet.tieu_de }}" class="w-full h-auto object-cover max-h-[600px]">
+        </div>
+    {% endif %}
+
+    <!-- Nội dung chính -->
+    <div class="prose prose-lg prose-red mt-8 max-w-none prose-headings:font-traditional prose-headings:text-quanho-brown prose-a:text-quanho-red hover:prose-a:text-quanho-gold mb-16">
+        {{ bai_viet.noi_dung|linebreaks }}
+    </div>
+    
+    <hr class="border-gray-200 mb-8">
+    
+    <!-- Footer Bài viết -->
+    <div class="bg-quanho-bg rounded-xl p-6 flex items-center justify-between border border-quanho-gold/20">
+        <div>
+            <h4 class="font-bold text-quanho-brown text-lg">Chia sẻ bài viết</h4>
+            <p class="text-sm text-gray-600 mt-1">Lan tỏa vẻ đẹp không gian văn hóa Quan họ Bắc Ninh</p>
+        </div>
+        <div class="flex gap-2">
+            <!-- Nút chia sẻ ảo -->
+            <button class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition shadow-sm"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></button>
+            <button class="w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 flex items-center justify-center hover:bg-gray-50 transition shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg></button>
+        </div>
+    </div>
+</div>
+{% endblock %}

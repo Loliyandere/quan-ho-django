@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Trang Cá Nhân - Quan Họ Bắc Ninh{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    
+    <!-- Profile Header -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden mb-12">
+        <div class="h-32 bg-quanho-brown relative">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')] opacity-30 mix-blend-overlay"></div>
+        </div>
+        <div class="px-8 pb-8 flex flex-col sm:flex-row items-center sm:items-end gap-6 relative -mt-16">
+            <div class="w-32 h-32 rounded-full border-4 border-white bg-quanho-gold flex items-center justify-center text-quanho-brown font-bold text-5xl shadow-md z-10">
+                {{ user.username.0|upper }}
+            </div>
+            <div class="text-center sm:text-left mb-2 flex-grow">
+                <h1 class="text-3xl font-traditional font-bold text-gray-900">{{ user.username }}</h1>
+                <p class="text-gray-500 mt-1">Thành viên Ban bảo tồn dân ca Quan họ</p>
+            </div>
+            <div class="sm:mb-2 text-center sm:text-right">
+                <span class="inline-block bg-quanho-bg text-quanho-red px-4 py-2 rounded-lg border border-quanho-gold/50 shadow-sm font-medium">
+                    <span class="text-2xl font-bold">{{ favorite_songs.count }}</span><br>
+                    <span class="text-xs">Bài hát yêu thích</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorite Songs Collection -->
+    <div>
+        <div class="flex items-center gap-3 mb-8 border-b-2 border-quanho-gold pb-3 inline-flex">
+            <svg class="w-8 h-8 text-red-500 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+            <h2 class="text-3xl font-traditional font-bold text-quanho-red">
+                Bộ sưu tập của tôi
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for bai in favorite_songs %}
+            <div class="song-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-xl hover:border-quanho-gold transition duration-300 flex flex-col relative group">
+                <!-- Delete overlay action -->
+                <button class="favorite-btn absolute top-3 right-3 z-10 p-2 bg-white/80 rounded-full shadow hover:bg-red-50 cursor-pointer focus:outline-none" data-id="{{ bai.id }}" title="Bỏ yêu thích">
+                     <svg class="w-6 h-6 text-red-500 fill-current transition group-hover:scale-110" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                     </svg>
+                </button>
+
+                <div class="bg-quanho-bg p-4 flex justify-center border-b border-gray-100">
+                    <svg class="w-12 h-12 text-quanho-red opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                </div>
+                
+                <div class="p-6 flex-grow flex flex-col">
+                    <h3 class="text-xl font-bold font-traditional text-quanho-brown mb-2 pr-8">{{ bai.ten_bai }}</h3>
+                    
+                    <div class="text-sm text-gray-600 space-y-1 mb-4">
+                        <p><span class="font-semibold text-gray-700">Làn điệu:</span> {{ bai.lan_dieu.ten|default:"Đang cập nhật" }}</p>
+                        <p><span class="font-semibold text-gray-700">Nghệ nhân:</span> {{ bai.nghe_nhan.ten|default:"Đang cập nhật" }}</p>
+                    </div>
+
+                    <div class="mt-auto pt-4 relative">
+                        <a href="{% url 'culture:song_detail' bai.pk %}" class="inline-flex items-center gap-2 text-quanho-red font-semibold hover:text-quanho-gold transition">
+                            Nghe lại <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center text-gray-500 py-16 bg-white rounded-lg border border-dashed border-gray-300">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                <p class="text-lg">Bạn chưa có bài hát yêu thích nào.</p>
+                <a href="{% url 'culture:home' %}" class="inline-block mt-4 px-6 py-2 bg-quanho-red text-white rounded-full hover:bg-[#7a1807] transition">Khám phá ngay</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const favoriteBtns = document.querySelectorAll('.favorite-btn');
+    favoriteBtns.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const songId = btn.getAttribute('data-id');
+            const card = btn.closest('.song-card');
+            
+            try {
+                const response = await fetch(`/toggle-favorite/${songId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (!data.is_favorited) {
+                        // Bỏ yêu thích thành công, xóa card khỏi DOM với animation nhỏ
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            card.remove();
+                            // Optional: update count if available
+                            const countEl = document.querySelector('.text-2xl.font-bold');
+                            if (countEl) {
+                                countEl.innerText = Math.max(0, parseInt(countEl.innerText) - 1);
+                            }
+                        }, 300);
+                    }
+                }
+            } catch (error) {
+                console.error('Error toggling favorite:', error);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

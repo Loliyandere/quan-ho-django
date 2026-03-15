@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Các Làn Điệu Quan Họ Bắc Ninh{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-traditional font-bold text-quanho-red border-b-2 border-quanho-gold inline-block pb-2">
+            Các Làn Điệu Quan Họ
+        </h1>
+        <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+            Khám phá những làn điệu đặc trưng làm nên linh hồn của Dân ca Quan họ Bắc Ninh.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for ld in lan_dieus %}
+        <div class="bg-[#f0e6d2] rounded-xl shadow border border-quanho-gold/30 hover:border-quanho-gold transition duration-300 overflow-hidden relative group">
+            <!-- Deco Pattern -->
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/woven.png')]"></div>
+            
+            <div class="p-8 relative z-10 flex flex-col h-full">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8 text-quanho-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                    <h2 class="text-2xl font-traditional font-bold text-quanho-brown group-hover:text-quanho-red transition">{{ ld.ten }}</h2>
+                </div>
+                
+                <p class="text-sm font-medium text-gray-700 mb-2">Nguồn gốc: <span class="text-quanho-red">{{ ld.nguon_goc|default:"Đang cập nhật" }}</span></p>
+                
+                <div class="flex-grow text-gray-700 leading-relaxed font-body">
+                    {% if ld.mo_ta_y_nghia %}
+                        <p class="line-clamp-4">{{ ld.mo_ta_y_nghia }}</p>
+                    {% else %}
+                        <p class="italic text-gray-500">Chưa có thông tin mô tả chi tiết.</p>
+                    {% endif %}
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-quanho-brown/20">
+                    <a href="{% url 'culture:home' %}?lan_dieu={{ ld.id }}" class="text-quanho-red font-semibold hover:text-quanho-gold inline-flex items-center gap-1 transition">
+                        Xem các bài hát <span aria-hidden="true">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-10 text-gray-500">
+            Chưa có làn điệu nào trong cơ sở dữ liệu.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

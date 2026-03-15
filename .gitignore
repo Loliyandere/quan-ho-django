@@ -1,0 +1,30 @@
+# --- DJANGO ---
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# File Uploads (Media)
+media/
+
+# Static files collected during deploy
+staticfiles/
+static_root/
+
+# --- PYTHON VIRTUAL ENVIRONMENT ---
+venv/
+env/
+.env/
+.venv/
+Scripts/
+
+# --- IDEs / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
