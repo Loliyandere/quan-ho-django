@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from .models import BaiHat, LanDieu, NgheNhan, BaiViet
+from .models import BaiHat, LanDieu, NgheNhan, BaiViet, LangQuanHo
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegisterForm
@@ -99,6 +99,12 @@ def lan_dieu_list(request):
 def nghe_nhan_list(request):
     nghe_nhans = NgheNhan.objects.all().order_by('ten')
     return render(request, 'culture/nghe_nhan_list.html', {'nghe_nhans': nghe_nhans})
+
+def lang_quan_ho_list(request):
+    # Lấy danh sách kèm số lượng nghệ nhân đếm được bằng annotate để in ra html luôn
+    from django.db.models import Count
+    lang_quan_hos = LangQuanHo.objects.annotate(so_nghe_nhan=Count('nghe_nhans')).order_by('ten_lang')
+    return render(request, 'culture/lang_quan_ho_list.html', {'lang_quan_hos': lang_quan_hos})
 
 def danh_sach_bai_viet(request):
     bai_viets = BaiViet.objects.all().order_by('-ngay_dang')

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin
-from .models import LanDieu, NgheNhan, BaiHat, BaiViet
+from .models import LanDieu, NgheNhan, BaiHat, BaiViet, LangQuanHo
 
 # --- CUSTOM USER ADMIN ---
 admin.site.unregister(User) # Hủy đăng ký User mặc định
@@ -30,11 +30,17 @@ class LanDieuAdmin(admin.ModelAdmin):
     list_display = ('ten', 'nguon_goc')
     search_fields = ('ten', 'mo_ta_y_nghia')
 
+@admin.register(LangQuanHo)
+class LangQuanHoAdmin(admin.ModelAdmin):
+    list_display = ('ten_lang', 'huyen')
+    search_fields = ('ten_lang', 'huyen', 'mo_ta')
+
 @admin.register(NgheNhan)
 class NgheNhanAdmin(admin.ModelAdmin):
-    list_display = ('ten', 'nam_sinh', 'danh_hieu')
+    list_display = ('ten', 'nam_sinh', 'danh_hieu', 'lang_que')
     search_fields = ('ten', 'tieu_su')
-    list_filter = ('danh_hieu',)
+    list_filter = ('danh_hieu', 'lang_que')
+    autocomplete_fields = ['lang_que']
 
 @admin.register(BaiHat)
 class BaiHatAdmin(admin.ModelAdmin):

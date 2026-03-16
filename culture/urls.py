@@ -9,6 +9,7 @@ urlpatterns = [
     path('song/<int:pk>/', views.song_detail, name='song_detail'),
     path('lan-dieu/', views.lan_dieu_list, name='lan_dieu_list'),
     path('nghe-nhan/', views.nghe_nhan_list, name='nghe_nhan_list'),
+    path('lang-quan-ho/', views.lang_quan_ho_list, name='lang_quan_ho_list'),
     path('tin-tuc/', views.danh_sach_bai_viet, name='danh_sach_bai_viet'),
     path('tin-tuc/<int:pk>/', views.chi_tiet_bai_viet, name='chi_tiet_bai_viet'),
     path('register/', views.user_register, name='user_register'),

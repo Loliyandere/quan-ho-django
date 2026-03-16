@@ -14,11 +14,24 @@ class LanDieu(models.Model):
         verbose_name = "Làn điệu"
         verbose_name_plural = "Các Làn điệu"
 
+class LangQuanHo(models.Model):
+    ten_lang = models.CharField(max_length=200, verbose_name="Tên làng")
+    huyen = models.CharField(max_length=150, verbose_name="Huyện/Thị xã", help_text="Ví dụ: TP Bắc Ninh, Tiên Du, Yên Phong...")
+    mo_ta = models.TextField(blank=True, null=True, verbose_name="Lịch sử/Đặc điểm làng")
+
+    def __str__(self):
+        return f"{self.ten_lang} ({self.huyen})"
+
+    class Meta:
+        verbose_name = "Làng Quan Họ"
+        verbose_name_plural = "Các Làng Quan Họ"
+
 class NgheNhan(models.Model):
     ten = models.CharField(max_length=200, verbose_name="Tên nghệ nhân")
     nam_sinh = models.IntegerField(blank=True, null=True, verbose_name="Năm sinh")
     danh_hieu = models.CharField(max_length=100, blank=True, null=True, verbose_name="Danh hiệu") # VD: NSND, NSƯT
-    tieu_su = models.TextField(blank=True, null=True, verbose_name="Tiểu sử")
+    lang_que = models.ForeignKey(LangQuanHo, on_delete=models.SET_NULL, null=True, blank=True, related_name='nghe_nhans', verbose_name="Thuộc Làng")
+    tieu_su = models.TextField(blank=True, null=True, verbose_name="Tiểu sử/Mô tả")
     anh_dai_dien = models.ImageField(upload_to='nghe_nhan/', blank=True, null=True, verbose_name="Ảnh đại diện")
 
     def __str__(self):
@@ -31,8 +44,8 @@ class NgheNhan(models.Model):
 
 class BaiHat(models.Model):
     ten_bai = models.CharField(max_length=255, verbose_name="Tên bài hát")
+    mo_ta_hoan_canh = models.TextField(blank=True, null=True, verbose_name="Mô tả thông tin bổ sung")
     loi_bai_hat = models.TextField(blank=True, null=True, verbose_name="Lời bài hát")
-    file_audio = models.URLField(blank=True, null=True, verbose_name="Link Audio/YouTube") # Hoặc FileField nếu upload file
     audio_file = models.FileField(upload_to='audios/', blank=True, null=True, verbose_name="File Audio (MP3/WAV)")
     youtube_url = models.URLField(blank=True, null=True, verbose_name="Link YouTube (để nhúng video)")
     lan_dieu = models.ForeignKey(LanDieu, on_delete=models.SET_NULL, null=True, blank=True, related_name='bai_hats', verbose_name="Làn điệu")
